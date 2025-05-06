@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackbird Tea, Coffee & More</title>
+    <style>
+        :root {
+            --open-color: #4CAF50;
+            --closed-color: #f44336;
+            --text-color: #ffffff;
+            --light-text: #f0f0f0;
+            --dark-text: #333333;
+            --accent-color: #FFD700;
+            --bg-color: #121212;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .open-container {
+            background-color: var(--open-color);
+            color: var(--text-color);
+        }
+
+        .closed-container {
+            background-color: var(--closed-color);
+            color: var(--text-color);
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            margin: 0;
+            padding: 0;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: normal;
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo span {
+            font-size: 3rem;
+            color: var(--dark-text);
+        }
+
+        .status {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .next-time {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .admin-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            color: var(--light-text);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .admin-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-button {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: var(--dark-text);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-time {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .update-time input, .update-time select {
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 0.5rem;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .update-time button {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            color: var(--dark-text);
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .location {
+            margin-top: 2rem;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        #password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .modal-content button {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            color: var(--dark-text);
+            cursor: pointer;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .modal-content .cancel-button {
+            background-color: #ccc;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .status {
+                font-size: 2.5rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+            
+            .next-time {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container closed-container" id="statusContainer">
+        <div class="logo">
+            <span>🐦</span>
+        </div>
+        <h1>Blackbird</h1>
+        <h2>Tea, Coffee & More</h2>
+        
+        <div class="status" id="statusText">CLOSED</div>
+        <div class="message" id="messageText">Sorry, we are currently closed.</div>
+        <div class="next-time" id="nextTimeText">Next opening: Loading...</div>
+        
+        <button class="admin-button" id="adminButton">Admin</button>
+        <button class="toggle-button" id="toggleButton">Open Store</button>
+        
+        <div class="update-time" id="updateTimeForm">
+            <h3>Set Next Opening Time</h3>
+            <input type="date" id="nextDate">
+            <select id="nextDay">
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+            </select>
+            <input type="time" id="nextTime">
+            <button id="updateTimeButton">Update</button>
+        </div>
+        
+        <div class="location">
+            Fulbari, Pokhara
+        </div>
+        
+        <footer>
+            © 2025 Blackbird Tea, Coffee & More
+        </footer>
+    </div>
+    
+    <div id="password-modal">
+        <div class="modal-content">
+            <h3>Admin Access</h3>
+            <p>Enter password to continue</p>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <div>
+                <button id="submitPassword">Submit</button>
+                <button class="cancel-button" id="cancelPassword">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const ADMIN_PASSWORD = "blackbird2025"; // Change this to your preferred password
+        
+        // DOM Elements
+        const statusContainer = document.getElementById('statusContainer');
+        const statusText = document.getElementById('statusText');
+        const messageText = document.getElementById('messageText');
+        const nextTimeText = document.getElementById('nextTimeText');
+        const adminButton = document.getElementById('adminButton');
+        const toggleButton = document.getElementById('toggleButton');
+        const updateTimeForm = document.getElementById('updateTimeForm');
+        const nextDateInput = document.getElementById('nextDate');
+        const nextDaySelect = document.getElementById('nextDay');
+        const nextTimeInput = document.getElementById('nextTime');
+        const updateTimeButton = document.getElementById('updateTimeButton');
+        const passwordModal = document.getElementById('password-modal');
+        const passwordInput = document.getElementById('passwordInput');
+        const submitPasswordButton = document.getElementById('submitPassword');
+        const cancelPasswordButton = document.getElementById('cancelPassword');
+        
+        // App State
+        let isOpen = false;
+        let nextOpenDate = null;
+        let nextCloseDate = null;
+        let adminMode = false;
+        
+        // Initialize the app
+        function init() {
+            loadStatus();
+            setCurrentDay();
+            setupEventListeners();
+            updateUI();
+        }
+        
+        // Load status from localStorage
+        function loadStatus() {
+            const savedStatus = localStorage.getItem('cafeStatus');
+            if (savedStatus) {
+                const parsedStatus = JSON.parse(savedStatus);
+                isOpen = parsedStatus.isOpen;
+                nextOpenDate = parsedStatus.nextOpenDate ? new Date(parsedStatus.nextOpenDate) : null;
+                nextCloseDate = parsedStatus.nextCloseDate ? new Date(parsedStatus.nextCloseDate) : null;
+            }
+        }
+        
+        // Save status to localStorage
+        function saveStatus() {
+            const statusToSave = {
+                isOpen: isOpen,
+                nextOpenDate: nextOpenDate ? nextOpenDate.toISOString() : null,
+                nextCloseDate: nextCloseDate ? nextCloseDate.toISOString() : null
+            };
+            localStorage.setItem('cafeStatus', JSON.stringify(statusToSave));
+        }
+        
+        // Set the current day in the day select
+        function setCurrentDay() {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const today = new Date().getDay();
+            nextDaySelect.value = days[today];
+            
+            // Set today's date as default
+            const dateToday = new Date();
+            const year = dateToday.getFullYear();
+            const month = String(dateToday.getMonth() + 1).padStart(2, '0');
+            const day = String(dateToday.getDate()).padStart(2, '0');
+            nextDateInput.value = `${year}-${month}-${day}`;
+            
+            // Set a default time a few hours from now
+            const hours = String((dateToday.getHours() + 3) % 24).padStart(2, '0');
+            const minutes = String(dateToday.getMinutes()).padStart(2, '0');
+            nextTimeInput.value = `${hours}:${minutes}`;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            adminButton.addEventListener('click', showPasswordModal);
+            toggleButton.addEventListener('click', toggleStatus);
+            updateTimeButton.addEventListener('click', updateNextTime);
+            submitPasswordButton.addEventListener('click', validatePassword);
+            cancelPasswordButton.addEventListener('click', hidePasswordModal);
+            
+            // Close modal if clicking outside content
+            passwordModal.addEventListener('click', function(e) {
+                if (e.target === passwordModal) {
+                    hidePasswordModal();
+                }
+            });
+            
+            // Allow pressing Enter in password field
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validatePassword();
+                }
+            });
+        }
+        
+        // Show password modal
+        function showPasswordModal() {
+            passwordModal.style.display = 'flex';
+            passwordInput.focus();
+        }
+        
+        // Hide password modal
+        function hidePasswordModal() {
+            passwordModal.style.display = 'none';
+            passwordInput.value = '';
+        }
+        
+        // Validate admin password
+        function validatePassword() {
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                enterAdminMode();
+                hidePasswordModal();
+            } else {
+                alert('Incorrect password. Please try again.');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+        
+        // Enter admin mode
+        function enterAdminMode() {
+            adminMode = true;
+            toggleButton.style.display = 'block';
+            updateTimeForm.style.display = 'block';
+        }
+        
+        // Toggle cafe status
+        function toggleStatus() {
+            isOpen = !isOpen;
+            
+            // Update next times
+            if (isOpen) {
+                // If we're opening, ask for next closing time
+                updateTimeForm.querySelector('h3').textContent = 'Set Next Closing Time';
+                nextCloseDate = getDateFromInputs();
+            } else {
+                // If we're closing, ask for next opening time
+                updateTimeForm.querySelector('h3').textContent = 'Set Next Opening Time';
+                nextOpenDate = getDateFromInputs();
+            }
+            
+            saveStatus();
+            updateUI();
+        }
+        
+        // Update next time schedule
+        function updateNextTime() {
+            const newDate = getDateFromInputs();
+            
+            if (isOpen) {
+                nextCloseDate = newDate;
+            } else {
+                nextOpenDate = newDate;
+            }
+            
+            saveStatus();
+            updateUI();
+            alert(`Next ${isOpen ? 'closing' : 'opening'} time updated successfully!`);
+        }
+        
+        // Get date from input fields
+        function getDateFromInputs() {
+            const dateValue = nextDateInput.value;
+            const timeValue = nextTimeInput.value;
+            
+            if (!dateValue || !timeValue) {
+                alert('Please set both date and time');
+                return null;
+            }
+            
+            return new Date(`${dateValue}T${timeValue}`);
+        }
+        
+        // Format date for display
+        function formatDate(date) {
+            if (!date) return 'Not scheduled';
+            
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const day = days[date.getDay()];
+            
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            
+            return `${day}, ${date.toLocaleDateString(undefined, options)}`;
+        }
+        
+        // Update UI based on current state
+        function updateUI() {
+            if (isOpen) {
+                statusContainer.className = 'container open-container';
+                statusText.textContent = 'OPEN';
+                messageText.textContent = 'Welcome! We\'re happy to serve you.';
+                nextTimeText.textContent = `Next closing: ${formatDate(nextCloseDate)}`;
+                toggleButton.textContent = 'Close Store';
+            } else {
+                statusContainer.className = 'container closed-container';
+                statusText.textContent = 'CLOSED';
+                messageText.textContent = 'Sorry, we are currently closed.';
+                nextTimeText.textContent = `Next opening: ${formatDate(nextOpenDate)}`;
+                toggleButton.textContent = 'Open Store';
+            }
+            
+            // Update form title based on status
+            updateTimeForm.querySelector('h3').textContent = 
+                isOpen ? 'Set Next Closing Time' : 'Set Next Opening Time';
+        }
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
